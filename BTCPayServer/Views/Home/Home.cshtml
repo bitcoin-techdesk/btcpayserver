@@ -1,16 +1,20 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
-    ViewBag.AlwaysShrinkNavBar = false;
+ViewData["Title"] = "Home Page";
+ViewBag.AlwaysShrinkNavBar = false;
 }
 
 
 <header class="masthead">
     <div class="header-content">
         <div class="header-content-inner text-white">
-            <h1>Welcome to BTCPay Server</h1>
+            <h1>Welcome merchants!</h1>
             <hr />
-            <p>BTCPay Server is a free and open source server for merchants wanting to accept Bitcoin for their business. The API is compatible with Bitpay service to allow seamless migration.</p>
-            <a style="background-color: #fff;color: #222;display:inline-block;text-align: center;white-space: nowrap;vertical-align: middle;user-select: none;line-height: 1.25;font-size: 1rem;text-decoration:none;font-weight: 700;    text-transform: uppercase;border: none;border-radius: 300px;padding: 15px 30px;" href="https://github.com/btcpayserver/btcpayserver-doc">Getting started</a>
+            <h2>Be your own bank!! <br />Start accepting Bitcoin & Lightning payments today.</h2>
+            <hr />
+            <p>BTCPayServer is a free and open source hosted Bitcoin payment processor <br /> for
+                merchants wanting to accept Bitcoin for their business.</p>
+            <a style="background-color: #fff;color: #222;display:inline-block;text-align: center;white-space: nowrap;vertical-align: middle;user-select: none;line-height: 1.25;font-size: 1rem;text-decoration:none;font-weight: 700;    text-transform: uppercase;border: none;border-radius: 300px;padding: 15px 30px;"
+                href="https://pay.bitcointechdesk.com/Account/Register">Register</a>
         </div>
     </div>
 </header>
@@ -30,7 +34,8 @@
                 <div class="service-box">
                     <img src="~/img/lock-logo.png" />
                     <h3 class="text-dark">Secure</h3>
-                    <p class="text-muted">The payment server does not need to know your private keys, so your money can't be stolen.</p>
+                    <p class="text-muted">The payment server does not need to know your private keys, so your money
+                        can't be stolen.</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 text-center">
@@ -51,69 +56,44 @@
     </div>
 </section>
 
-
-
-<div class="call-to-action bg-dark text-white">
-    <div class="container text-center">
-        <h2>Video tutorials</h2>
-        <div class="row">
-            <div class="col-md-4 text-center">
-            </div>
-            <div class="col-md-4 text-center">
-                <a href="https://www.youtube.com/channel/UCpG9WL6TJuoNfFVkaDMp9ug" target="_blank">
-                    <img src="~/img/youtube.png" height="225" width="400" />
-                </a>
-            </div>
-            <div class="col-md-6 text-center">
-            </div>
-        </div>
-    </div>
-</div>
-
-<section>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="section-heading">Special thanks</h2>
-                <hr class="primary">
-                <p>Thanks to those who gave me some time to work on this project, or helped me.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 mr-auto text-center">
-                <a href="https://www.dglab.com/en/">
-                    <img src="~/img/dglab.gif" height="100" />
-                </a>
-                <p>
-                    <a href="https://www.dglab.com/en/">DG Lab</a>
-                </p>
-            </div>
-            <div class="col-lg-4 ml-auto text-center">
-                <a href="https://metaco.com/">
-                    <img src="~/img/metaco.jpg" height="100" />
-                </a>
-                <p><a href="https://metaco.com/">Metaco</a></p>
-            </div>
-            <div class="col-lg-4 mr-auto text-center">
-                <a href="https://ibukingdom.themedia.jp/">
-                    <img src="~/img/ibuki.png" height="100" />
-                </a>
-                <p>
-                    <a href="https://ibukingdom.themedia.jp/">Designer</a>
-                </p>
+<section class="bg-dark text-white h-100">
+    <div class="container d-flex h-100">
+        <div class="justify-content-center align-self-center text-center mx-auto" style="margin: auto;">
+            <h1 class="mb-4">Please Donate!</h1>
+            <p>Find our BTCPayServer valuable? Help us grow by contributing bitcoins!</p>
+            <form method="post" action="/apps/DVCB3FGSqKFd7BHVowgcmw1NcqaV5ufZRtFdK2bjG5h5/pos">
+                <div class="row">
+                    <div class="col-sm-4 mb-3">
+                        <h3>Steak</h3>
+                        <button type="submit" name="choiceKey" class="btn btn-primary" value="Large">$20.00</button>
+                    </div>
+                    <div class="col-sm-4 mb-4">
+                        <h3>Coffee</h3>
+                        <button type="submit" name="choiceKey" class="btn btn-primary" value="Medium">$5.00</button>
+                    </div>
+                    <div class="col-sm-4 mb-4">
+                        <h3>Lightning!</h3>
+                        <button type="submit" name="choiceKey" class="btn btn-primary" value="Small">$1.00</button>
+                    </div>
+                </div>
+            </form>
+            <div class="row mt-4">
+                <div class="col-md-4 offset-md-4 col-sm-6 offset-sm-3">
+                    <form method="post" data-buy action="/apps/DVCB3FGSqKFd7BHVowgcmw1NcqaV5ufZRtFdK2bjG5h5/pos">
+                        <div class="input-group">
+                            <input class="form-control" type="number" min="0" step="1" name="amount" placeholder="amount">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Pay</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+    <script src="/vendor/jquery/jquery.js"></script>
+    <script src="/vendor/bootstrap4/js/bootstrap.js"></script>
 </section>
-
-<div class="call-to-action bg-dark text-white">
-    <div class="container text-center">
-        <h2>Donate</h2>
-        <p>Donation to this address will be reinvested into the development of this tool</p>
-        <p><img src="~/img/donation.jpg"></p>
-        <p>3BpfdkF93GwFRWdrAN3SNsRAsi6d158YQi</p>
-    </div>
-</div>
 
 <section id="contact">
     <div class="container">
@@ -143,13 +123,24 @@
                 </p>
             </div>
             <div class="col-lg-4 mr-auto text-center">
-                <a href="https://github.com/btcpayserver/btcpayserver">
+                <a href="https://github.com/bitcoin-techdesk">
                     <img src="~/img/github.png" height="100" />
                 </a>
                 <p>
-                    <a href="https://github.com/btcpayserver/btcpayserver">On Github</a>
+                    <a href="https://github.com/bitcoin-techdesk">On Github</a>
                 </p>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="bg-dark text-white">
+    <div class="container text-center">
+        <h2>Market Price</h2>
+        <div id="coindesk-widget" data-size="mpu" data-align="center"></div>
+        <script type="text/javascript" src="//widget.coindesk.com/bpiticker/coindesk-widget.min.js"></script>
+        <p></p>
+        <h3>Special Thanks to <a href="https://twitter.com/NicolasDorier">Nicolas Dorier</a>, <a href="https://twitter.com/r0ckstardev">RockstarDev</a>,
+            and the <a href="http://slack.forkbitpay.ninja/">BTCPayServer Community</a></h3>
     </div>
 </section>
