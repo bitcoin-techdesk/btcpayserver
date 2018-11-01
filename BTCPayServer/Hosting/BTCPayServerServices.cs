@@ -38,10 +38,12 @@ using BTCPayServer.Logging;
 using BTCPayServer.HostedServices;
 using Meziantou.AspNetCore.BundleTagHelpers;
 using System.Security.Claims;
+using BTCPayServer.Payments.Changelly;
 using BTCPayServer.Security;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NBXplorer.DerivationStrategy;
 using NicolasDorier.RateLimits;
+using Npgsql;
 
 namespace BTCPayServer.Hosting
 {
@@ -75,17 +77,23 @@ namespace BTCPayServer.Hosting
             {
                 var opts = o.GetRequiredService<BTCPayServerOptions>();
                 ApplicationDbContextFactory dbContext = null;
-                if (opts.PostgresConnectionString == null)
+                if (!String.IsNullOrEmpty(opts.PostgresConnectionString))
+                {
+                    Logs.Configuration.LogInformation($"Postgres DB used ({opts.PostgresConnectionString})");
+                    dbContext = new ApplicationDbContextFactory(DatabaseType.Postgres, opts.PostgresConnectionString);
+                }
+                else if(!String.IsNullOrEmpty(opts.MySQLConnectionString))
+                {
+                    Logs.Configuration.LogInformation($"MySQL DB used ({opts.MySQLConnectionString})");
+                    dbContext = new ApplicationDbContextFactory(DatabaseType.MySQL, opts.MySQLConnectionString);
+                }
+                else
                 {
                     var connStr = "Data Source=" + Path.Combine(opts.DataDir, "sqllite.db");
                     Logs.Configuration.LogInformation($"SQLite DB used ({connStr})");
                     dbContext = new ApplicationDbContextFactory(DatabaseType.Sqlite, connStr);
                 }
-                else
-                {
-                    Logs.Configuration.LogInformation($"Postgres DB used ({opts.PostgresConnectionString})");
-                    dbContext = new ApplicationDbContextFactory(DatabaseType.Postgres, opts.PostgresConnectionString);
-                }
+                 
                 return dbContext;
             });
 
@@ -125,6 +133,8 @@ namespace BTCPayServer.Hosting
 
             services.AddSingleton<Payments.IPaymentMethodHandler<Payments.Lightning.LightningSupportedPaymentMethod>, Payments.Lightning.LightningLikePaymentHandler>();
             services.AddSingleton<IHostedService, Payments.Lightning.LightningListener>();
+            
+            services.AddSingleton<ChangellyClientProvider>();
 
             services.AddSingleton<IHostedService, NBXplorerWaiters>();
             services.AddSingleton<IHostedService, InvoiceNotificationManager>();
@@ -191,7 +201,7 @@ namespace BTCPayServer.Hosting
 
         static void Retry(Action act)
         {
-            CancellationTokenSource cts = new CancellationTokenSource(10000);
+            CancellationTokenSource cts = new CancellationTokenSource(1000);
             while (true)
             {
                 try
@@ -199,7 +209,9 @@ namespace BTCPayServer.Hosting
                     act();
                     return;
                 }
-                catch when(!cts.IsCancellationRequested)
+                // Starting up
+                catch (PostgresException ex) when (ex.SqlState == "57P03") { Thread.Sleep(1000); }
+                catch when (!cts.IsCancellationRequested)
                 {
                     Thread.Sleep(100);
                 }
