@@ -142,6 +142,8 @@ namespace BTCPayServer.Controllers
 
         public ViewPointOfSaleViewModel.Item[] Parse(string template, string currency)
         {
+            if (string.IsNullOrWhiteSpace(template))
+                return Array.Empty<ViewPointOfSaleViewModel.Item>();
             var input = new StringReader(template);
             YamlStream stream = new YamlStream();
             stream.Load(input);
@@ -152,7 +154,17 @@ namespace BTCPayServer.Controllers
                 .Where(kv => kv.Value != null)
                 .Select(c => new ViewPointOfSaleViewModel.Item()
                 {
+                    Description = c.Value.Children
+                             .Select(kv => new { Key = (kv.Key as YamlScalarNode)?.Value, Value = kv.Value as YamlScalarNode })
+                             .Where(kv => kv.Value != null)
+                             .Where(cc => cc.Key == "description")
+                             .FirstOrDefault()?.Value?.Value,
                     Id = c.Key,
+                    Image = c.Value.Children
+                             .Select(kv => new { Key = (kv.Key as YamlScalarNode)?.Value, Value = kv.Value as YamlScalarNode })
+                             .Where(kv => kv.Value != null)
+                             .Where(cc => cc.Key == "image")
+                             .FirstOrDefault()?.Value?.Value,
                     Title = c.Value.Children
                              .Select(kv => new { Key = (kv.Key as YamlScalarNode)?.Value, Value = kv.Value as YamlScalarNode })
                              .Where(kv => kv.Value != null)
